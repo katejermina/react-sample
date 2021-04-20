@@ -1,8 +1,12 @@
 import Header from './components/Header'
 import Tasks from './components/Tasks'
+import AddTask from './components/AddTask'
+
 import { useState } from 'react'
 
 const App = () => {
+
+  const [showAddTask, setShowAddTask] = useState(false)
   //setTasks is used to alter/edit info somehow
   //array is part of state
 
@@ -27,6 +31,14 @@ const App = () => {
     },
   ])
 
+  //Add task
+  const addTask = (task) => {
+    const id = Math.floor(Math.random() * 1000) + 1
+    const newTask = { id, ...task }
+    setTasks([...tasks, newTask])
+    console.log(task);
+  }
+
   //Delete task
   const deleteTask = (id) => {
     console.log(id)
@@ -43,10 +55,13 @@ const App = () => {
     )
   }
 
+
   return (
     <div className="container">
       {/* <p>this is a ternary operator: {x ? 'ahuh' : 'no'}</p> */}
-      <Header title='Pass it on' />
+      <Header title='Task Tracker' onAdd={() => setShowAddTask(!showAddTask)} showAdd={showAddTask} />
+      {showAddTask && <AddTask onAdd={addTask} />}
+
       {tasks.length > 0 ? (
         <Tasks tasks={tasks} onDelete={deleteTask} onToggle={toggleReminder} />
       ) : (
